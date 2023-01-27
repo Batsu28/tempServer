@@ -40,6 +40,20 @@ app.delete("/test/:id", (req, res) => {
   data.test = filter;
   res.send(`id: ${req.params.id} deleted successfully`);
 });
+app.patch("/test/:id", (req, res) => {
+  console.log("req.params.id");
+  console.log(req.body.name);
+  let test = data.test.find((fu) => fu.id === req.params.id);
+
+  data.test[data.test.indexOf(test)] = req.body;
+
+  res.send(`id: ${req.params.id} deleted successfully`);
+});
+
+// app.put("/products/:id", (req, res) => {
+//   console.log(req.params.id);
+// });
+
 app.listen(port, () => {
   console.log(`server is starting in ${port} port`);
 });
