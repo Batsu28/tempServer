@@ -130,7 +130,8 @@
       "price": 1200,
       "stock": 247,
       "sale": 10,
-      "category": "computers & tablets"
+      "category": "computers & tablets",
+      "id": "5cc6f9e8"
     },
 
     {
@@ -145,7 +146,8 @@
       "price": 80,
       "stock": 4,
       "sale": 2,
-      "category": "appliances"
+      "category": "appliances",
+      "id": "5cc6f51a"
     },
 
     {
@@ -161,7 +163,8 @@
       "price": 7920,
       "stock": 164,
       "sale": 27,
-      "category": "appliances"
+      "category": "appliances",
+      "id": "6d7a0eec"
     },
 
     {
@@ -177,7 +180,8 @@
       "price": 215.99,
       "stock": 15,
       "sale": 12,
-      "category": "computers & tablets"
+      "category": "computers & tablets",
+      "id": "939c0576"
     },
 
     {
@@ -193,7 +197,8 @@
       "price": 1342,
       "stock": 122,
       "sale": 23,
-      "category": "computers & tablets"
+      "category": "computers & tablets",
+      "id": "6d7a131a"
     },
     {
       "description": "Beats Solo3 Wireless supports spatial audio for immersive music – delivering a surround sound experience that you can take with you anywhere.*",
@@ -207,7 +212,8 @@
       "price": 200,
       "stock": 60,
       "sale": 10,
-      "category": "computers & tablets"
+      "category": "computers & tablets",
+      "id": "6d7a11d0"
     },
     {
       "description": "",
@@ -559,7 +565,7 @@
       "status": "Хүргэгдсэн"
     }
   ],
-  "test": [
+  "tests": [
     { "name": "test", "id": "1" },
     { "name": "test", "id": "2" },
     { "name": "test", "id": "3" }
