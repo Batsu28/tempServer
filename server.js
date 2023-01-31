@@ -1,11 +1,11 @@
 const cors = require("cors");
 const express = require("express");
+const fs = require("fs");
+
 const { v1: uuidv1 } = require("uuid");
 
 const app = express();
 const port = 2000;
-
-const data = require("./data.json");
 
 app.use(cors());
 app.use(express.json());
@@ -13,20 +13,51 @@ app.use(express.json());
 //products
 
 app.get("/products", (req, res) => {
-  console.log("product list avah req irlee"),
-    res.status(200).json(data.products);
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let products = JSON.parse(data);
+      res.status(200).json(products);
+    }
+  });
 });
 app.post("/products", (req, res) => {
-  data.products.push({ ...req.body, id: uuidv1().split("-")[0] });
-  res.status(201).send("product uploaded");
-  res.status(403).send("product error403");
+  console.log(req.body);
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let savedData = JSON.parse(data);
+      savedData.push({ ...req.body, id: uuidv1().split("-")[0] });
+      fs.writeFile("./data/products.json", JSON.stringify(savedData), (err) => {
+        if (err) {
+          res.status(500).send({ message: err });
+        } else {
+          res.status(200).send({ message: "added" });
+        }
+      });
+    }
+  });
 });
+
 app.delete("/products/:id", (req, res) => {
   console.log(req.params);
-  data.products = data.products.filter(
-    (product) => product.id !== req.params.id
-  );
-  res.send(`product id: ${req.params.id} is deleted successfully`);
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let products = JSON.parse(data);
+      products = products.filter((product) => product.id !== req.params.id);
+      fs.writeFile("./data/products.json", JSON.stringify(products), (err) => {
+        if (err) {
+          res.status(500).send({ message: err });
+        } else {
+          res.status(200).send({ message: "added" });
+        }
+      });
+    }
+  });
 });
 app.put("/products/:id", (req, res) => {
   console.log(req.params.id);
