@@ -34,7 +34,7 @@ app.post("/products", (req, res) => {
         if (err) {
           res.status(500).send({ message: err });
         } else {
-          res.status(200).send({ message: "added" });
+          res.status(200).send(`product nemeglee`, products);
         }
       });
     }
@@ -48,12 +48,15 @@ app.delete("/products/:id", (req, res) => {
       res.status(500).send({ message: err });
     } else {
       let products = JSON.parse(data);
-      products = products.filter((product) => product.id !== req.params.id);
+      let leftProducts = products.filter(
+        (product) => product.id !== req.params.id
+      );
+      products = leftProducts;
       fs.writeFile("./data/products.json", JSON.stringify(products), (err) => {
         if (err) {
           res.status(500).send({ message: err });
         } else {
-          res.status(200).send({ message: "added" });
+          res.status(200).send(`${req.params.id} id ustlaa`, products);
         }
       });
     }
