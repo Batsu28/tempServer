@@ -48,10 +48,7 @@ app.delete("/products/:id", (req, res) => {
       res.status(500).send({ message: err });
     } else {
       let products = JSON.parse(data);
-      let leftProducts = products.filter(
-        (product) => product.id !== req.params.id
-      );
-      products = leftProducts;
+      products = products.filter((product) => product.id !== req.params.id);
       fs.writeFile("./data/products.json", JSON.stringify(products), (err) => {
         if (err) {
           res.status(500).send({ message: err });
@@ -63,8 +60,27 @@ app.delete("/products/:id", (req, res) => {
   });
 });
 app.put("/products/:id", (req, res) => {
-  console.log(req.params.id);
-  res.send(`${req.params.id}`);
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let products = JSON.parse(data);
+      let patchedProduct = products.find((test) => test.id === req.params.id);
+
+      products[products.indexOf(patchedProduct)] = {
+        ...req.body,
+        id: req.params.id,
+      };
+
+      fs.writeFile("./data/products.json", JSON.stringify(products), (err) => {
+        if (err) {
+          res.status(500).send({ message: err });
+        } else {
+          res.status(200).send(`${req.params.id} id product uurchlult orloo`);
+        }
+      });
+    }
+  });
 });
 
 //logInUser
