@@ -10,6 +10,47 @@ const port = 2000;
 app.use(cors());
 app.use(express.json());
 
+app.get("/productsFilter/:cate/:num", (req, res) => {
+  fs.readFile("./data/products.json", (error, data) => {
+    if (error) {
+      res.status(500).send({ message: error });
+    } else {
+      let products = JSON.parse(data);
+      let category = req.params.cate;
+      let num = req.params.num;
+
+      if (category === "all") {
+        num == 0
+          ? res.status(200).send(filteredProds.slice(0, 8))
+          : res
+              .status(200)
+              .send(products.slice(0 + (num - 1) * 8), 8 + (num - 1) * 8);
+      } else if (category === "popular") {
+        num == 0
+          ? res.status(200).send(products.slice(0, 8))
+          : res.status(200).send(products.slice(0, 8));
+      } else if (category === "sale") {
+        let filteredProds = products.filter((product) => product.sale > 0);
+        num == 0
+          ? res.status(200).send(filteredProds.slice(0, 8))
+          : res
+              .status(200)
+              .send(filteredProds.slice(0 + (num - 1) * 8), 8 + (num - 1) * 8);
+      } else {
+        let filteredProds = products.filter(
+          (product) => product.category === category
+        );
+
+        num == 0
+          ? res.status(200).json(filteredProds.slice(0, 8))
+          : res
+              .status(200)
+              .json(filteredProds.slice(0 + (num - 1) * 8, 8 + (num - 1) * 8));
+      }
+    }
+  });
+});
+
 //products
 
 app.get("/products", (req, res) => {
