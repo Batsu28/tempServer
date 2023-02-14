@@ -10,6 +10,8 @@ const port = 2000;
 app.use(cors());
 app.use(express.json());
 
+// get Products && Product (Client)
+
 app.get("/productsFilter/:cate/:num", (req, res) => {
   fs.readFile("./data/products.json", (error, data) => {
     if (error) {
@@ -21,10 +23,10 @@ app.get("/productsFilter/:cate/:num", (req, res) => {
 
       if (category === "all") {
         num == 0
-          ? res.status(200).send(filteredProds.slice(0, 8))
+          ? res.status(200).send(products.slice(0, 8))
           : res
               .status(200)
-              .send(products.slice(0 + (num - 1) * 8), 8 + (num - 1) * 8);
+              .send(products.slice(0 + (num - 1) * 16, 16 + (num - 1) * 16));
       } else if (category === "popular") {
         num == 0
           ? res.status(200).send(products.slice(0, 8))
@@ -35,7 +37,9 @@ app.get("/productsFilter/:cate/:num", (req, res) => {
           ? res.status(200).send(filteredProds.slice(0, 8))
           : res
               .status(200)
-              .send(filteredProds.slice(0 + (num - 1) * 8), 8 + (num - 1) * 8);
+              .send(
+                filteredProds.slice(0 + (num - 1) * 16, 16 + (num - 1) * 16)
+              );
       } else {
         let filteredProds = products.filter(
           (product) => product.category === category
@@ -45,12 +49,36 @@ app.get("/productsFilter/:cate/:num", (req, res) => {
           ? res.status(200).json(filteredProds.slice(0, 8))
           : res
               .status(200)
-              .json(filteredProds.slice(0 + (num - 1) * 8, 8 + (num - 1) * 8));
+              .json(
+                filteredProds.slice(0 + (num - 1) * 16, 16 + (num - 1) * 16)
+              );
       }
     }
   });
 });
 
+app.get("/product/:id", (req, res) => {
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let products = JSON.parse(data);
+      let product = products.filter((product) => product.id === req.params.id);
+      res.status(200).json(...product);
+    }
+  });
+});
+
+app.get("/products/lastPage", (req, res) => {
+  fs.readFile("./data/products.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let products = JSON.parse(data);
+      res.status(200).json(Math.ceil(products.length / 16));
+    }
+  });
+});
 //products
 
 app.get("/products", (req, res) => {
@@ -63,6 +91,7 @@ app.get("/products", (req, res) => {
     }
   });
 });
+
 app.post("/products", (req, res) => {
   console.log(req.body);
   fs.readFile("./data/products.json", (err, data) => {
@@ -100,6 +129,7 @@ app.delete("/products/:id", (req, res) => {
     }
   });
 });
+
 app.put("/products/:id", (req, res) => {
   fs.readFile("./data/products.json", (err, data) => {
     if (err) {
@@ -126,9 +156,28 @@ app.put("/products/:id", (req, res) => {
 
 //logInUser
 
-app.get("/logInUser", (req, res) => {
-  console.log("logInUsers list avah req irlee"),
-    res.status(200).json(data.logInUser);
+app.post("/user-log-in", (req, res) => {
+  console.log("logInUsers list avah req irlee", req.body);
+  fs.readFile("./data/users.json", (err, data) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    } else {
+      let users = JSON.parse(data);
+      let logIn = req.body;
+      let user = users.filter(
+        (user) =>
+          user.username === logIn.username &&
+          user.password === logIn.password &&
+          user.role === "user"
+      );
+      console.log("check", user);
+      if (user.length > 0) {
+        res.status(200).send(...user);
+      } else {
+        res.status(404).send({ message: "username password buruu bna" });
+      }
+    }
+  });
 });
 
 //orders
