@@ -157,14 +157,13 @@ app.put("/products/:id", (req, res) => {
 //logInUser
 
 app.post("/user-log-in", (req, res) => {
-  console.log("logInUsers list avah req irlee", req.body);
   fs.readFile("./data/users.json", (err, data) => {
     if (err) {
       res.status(500).send({ message: err });
     } else {
       let users = JSON.parse(data);
       let logIn = req.body;
-      let user = users.filter(
+      let user = users.find(
         (user) =>
           user.username === logIn.username &&
           user.password === logIn.password &&
@@ -172,9 +171,9 @@ app.post("/user-log-in", (req, res) => {
       );
       console.log("check", user);
       if (user.length > 0) {
-        res.status(200).send(...user);
+        res.status(200).send(user);
       } else {
-        res.status(404).send({ message: "username password buruu bna" });
+        res.status(403).send({ message: "username password buruu bna" });
       }
     }
   });
