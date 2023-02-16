@@ -170,7 +170,7 @@ app.post("/user-log-in", (req, res) => {
           user.role === "user"
       );
       console.log("check", user);
-      if (user.length > 0) {
+      if (user) {
         res.status(200).send(user);
       } else {
         res.status(403).send({ message: "username password buruu bna" });
